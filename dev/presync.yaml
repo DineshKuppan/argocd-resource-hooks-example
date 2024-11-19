@@ -2,74 +2,44 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: presync-job
+  generateName: pre-sync-webhook-
   annotations:
     argocd.argoproj.io/hook: PreSync
-spec:
-  template:
-    spec:
-      containers:
-        - name: presync-job
-          image: ubuntu
-          command: 
-            - /bin/bash
-            - -c
-            - |
-              echo "Integration testing Done"
-              
-      restartPolicy: Never
-  backoffLimit: 2
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: postsync-job
-  annotations:
-    argocd.argoproj.io/hook: PostSync    
-spec:
-  template:
-    spec:
-      containers:
-        - name: postsync-job-success
-          image: ubuntu
-          command: 
-            - /bin/bash
-            - -c
-            - |
-              apt update -y
-              echo "*******************************************************************************************************************************************"
-              apt upgrade -y
-              echo "*******************************************************************************************************************************************"
-              apt install curl -y
-              echo "*******************************************************************************************************************************************"
-              curl --version
-              echo "*******************************************************************************************************************************************"
-              curl -X POST -H "Content-type: application/json; charset=utf-8" -H "Bearer xoxb-" --data '{"channel":"C03MY9B7268", "text":"Synced succesfully"}' https://slack.com/api/chat.postMessage
-
-      restartPolicy: Never
-  backoffLimit: 2
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  generateName: app-slack-notification-fail-
-  annotations:
-    argocd.argoproj.io/hook: SyncFail
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
   template:
     spec:
       containers:
-      - name: slack-notification-failed
-        image: ubuntu
-        command: 
-            - /bin/bash
-            - -c
-            - |
-              apt update -y
-              apt upgrade -y
-              apt install curl -y
-              curl --version
-              curl -X POST -H "Content-type: application/json; charset=utf-8" -H "Bearer xoxb-" --data "{'text':'SYNC Failed'}" https://slack.com/api/chat.postMessage
+      - name: webhook-trigger
+        image: curlimages/curl
+        command:
+        - "curl"
+        - "-X"
+        - "POST"
+        - "--data-urlencode"
+        - "payload={\"commit_id\": \"$(git rev-parse HEAD)\", \"repo_url\": \"https://github.com/DineshKuppan/argocd-resource-hooks-example.git\"}"
+        - "https://github.com/DineshKuppan/argocd-resource-hooks-example.git"
       restartPolicy: Never
-  backoffLimit: 2
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: post-sync-notification-
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: webhook-trigger-deployment
+        image: curlimages/curl
+        command:
+        - "curl"
+        - "-X"
+        - "POST"
+        - "--data-urlencode"
+        - "payload={\"environment\":\"PRODUCTION\",\"result\": \"SUCCESS\", \"commit_id\": \"$(git rev-parse HEAD)\", \"repo_url\": \"https://github.com/DineshKuppan/argocd-resource-hooks-example.git\"}"
+        - "https://github.com/DineshKuppan/argocd-resource-hooks-example.git"
+      restartPolicy: Never
