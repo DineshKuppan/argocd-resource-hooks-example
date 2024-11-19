@@ -44,7 +44,7 @@ spec:
               echo "*******************************************************************************************************************************************"
               curl --version
               echo "*******************************************************************************************************************************************"
-              curl -X POST -H "Content-type: application/json; charset=utf-8" --data '{"channel":"C03MY9B7268", "text":"Synced succesfully"}' https://hooks.slack.com/services/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
+              curl -X POST -H "Content-type: application/json; charset=utf-8" -H "Bearer xoxb-" --data '{"channel":"C03MY9B7268", "text":"Synced succesfully"}' https://slack.com/api/chat.postMessage
 
       restartPolicy: Never
   backoffLimit: 2
@@ -70,6 +70,6 @@ spec:
               apt upgrade -y
               apt install curl -y
               curl --version
-              curl -X POST -H "Content-type: application/json" --data "{'text':'SYNC Failed'}" https://hooks.slack.com/services/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
+              curl -X POST -H "Content-type: application/json; charset=utf-8" -H "Bearer xoxb-" --data "{'text':'SYNC Failed'}" https://slack.com/api/chat.postMessage
       restartPolicy: Never
   backoffLimit: 2
