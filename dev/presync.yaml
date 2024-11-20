@@ -16,9 +16,11 @@ spec:
         - "curl"
         - "-X"
         - "POST"
+        - "-H \"Authorization: Bearer O4VSLLiLwymgy2YE1opojDHMz5vGzwqRk0ltspvmcZzzxlLkG7tsLdjxd3CNmn239uaMM4765p2PO9a2L5bUlPn4w2nQf7WvouULCnnWIEVZ37p6KrxRiONwSW8HDDVP\""
+        - "-H \"Content-Type: application/json\""
         - "--data-urlencode"
         - "payload={\"commit_id\": \"$(git rev-parse HEAD)\", \"repo_url\": \"https://github.com/DineshKuppan/argocd-resource-hooks-example.git\"}"
-        - "https://github.com/DineshKuppan/argocd-resource-hooks-example.git"
+        - "http://localhost:4000/api/plugins/webhook/connections/1/deployments"
       restartPolicy: Never
 
 ---
@@ -39,7 +41,9 @@ spec:
         - "curl"
         - "-X"
         - "POST"
+        - "-H \"Authorization: Bearer O4VSLLiLwymgy2YE1opojDHMz5vGzwqRk0ltspvmcZzzxlLkG7tsLdjxd3CNmn239uaMM4765p2PO9a2L5bUlPn4w2nQf7WvouULCnnWIEVZ37p6KrxRiONwSW8HDDVP\""
+        - "-H \"Content-Type: application/json\""
         - "--data-urlencode"
         - "payload={\"environment\":\"PRODUCTION\",\"result\": \"SUCCESS\", \"commit_id\": \"$(git rev-parse HEAD)\", \"repo_url\": \"https://github.com/DineshKuppan/argocd-resource-hooks-example.git\"}"
-        - "https://github.com/DineshKuppan/argocd-resource-hooks-example.git"
+        - "http://localhost:4000/api/plugins/webhook/connections/1/deployments"
       restartPolicy: Never
