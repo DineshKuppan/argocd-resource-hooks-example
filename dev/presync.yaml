@@ -19,7 +19,7 @@ spec:
         - "-H \"Authorization: Bearer VQuRqzBWsGlYcFH8Cu5PCpV1B1ju5lbCzaDM2ESQfgB5TGEJhiCyMIrGah3zBjDhAzA8yp4y6jpT62LHvymv5P0lQw02RAQUiTxRIjwQStRel4x1i3mcGHk4ZBUnmiA5\""
         - "-H \"Content-Type: application/json\""
         - "--data-urlencode"
-        - "payload={\"commit_id\": \"$(git rev-parse HEAD)\", \"repo_url\": \"https://github.com/DineshKuppan/argocd-resource-hooks-example.git\"}"
+        - "payload={\"deploymentCommits\": [{\"commit_id\": \"d8cf3fcb842059c54cd721a8da0a348c490a31c2\",\"commit_sha\": \"d8cf3fcb842059c54cd721a8da0a348c490a31c2\",\"repo_url\": \"https://github.com/DineshKuppan/argocd-resource-hooks-example.git\"}],\"environment\": \"PRODUCTION\",\"result\": \"FAILURE\", \"start_time\": \"$(date +'%Y-%m-%d %H:%M:%S')\"}"
         - "http://192.168.1.2:4000/api/rest/plugins/webhook/connections/1/deployments"
       restartPolicy: Never
 
@@ -44,6 +44,6 @@ spec:
         - "-H \"Authorization: Bearer VQuRqzBWsGlYcFH8Cu5PCpV1B1ju5lbCzaDM2ESQfgB5TGEJhiCyMIrGah3zBjDhAzA8yp4y6jpT62LHvymv5P0lQw02RAQUiTxRIjwQStRel4x1i3mcGHk4ZBUnmiA5\""
         - "-H \"Content-Type: application/json\""
         - "--data-urlencode"
-        - "payload={\"environment\":\"PRODUCTION\",\"result\": \"SUCCESS\", \"commit_id\": \"$(git rev-parse HEAD)\", \"repo_url\": \"https://github.com/DineshKuppan/argocd-resource-hooks-example.git\"}"
+        - "payload={\"deploymentCommits\": [{\"commit_id\": \"d8cf3fcb842059c54cd721a8da0a348c490a31c2\",\"commit_sha\": \"d8cf3fcb842059c54cd721a8da0a348c490a31c2\",\"repo_url\": \"https://github.com/DineshKuppan/argocd-resource-hooks-example.git\"}],\"environment\": \"PRODUCTION\",\"result\": \"FAILURE\", \"start_time\": \"$(date +'%Y-%m-%d %H:%M:%S')\"}"
         - "http://192.168.1.2:4000/api/rest/plugins/webhook/connections/1/deployments"
       restartPolicy: Never
